@@ -126,28 +126,6 @@
     </style>
 </head>
 
-<script>
-  const toggleBtn = document.getElementById('mobile-menu-toggle');
-  const closeBtn = document.getElementById('mobile-menu-close');
-  const mobileNav = document.getElementById('mobile-nav');
-
-  // Open menu
-  toggleBtn.addEventListener('click', () => {
-    mobileNav.classList.remove('hidden');
-  });
-
-  // Close menu (close button)
-  closeBtn.addEventListener('click', () => {
-    mobileNav.classList.add('hidden');
-  });
-
-  // Close menu when any nav link is clicked
-  mobileNav.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      mobileNav.classList.add('hidden');
-    });
-  });
-</script>
 
 <body class="text-gray-200">
 
@@ -187,7 +165,9 @@
     <!-- Mobile Header (Only for small screens) -->
     <header class="md:hidden fixed w-full z-50 bg-black/80 backdrop-blur-md py-4 px-4 flex justify-between items-center font-[Orbitron]">
         <a href="#home" class="text-sky-400 text-xl font-bold">Dev Thakkar</a>
-        <button id="mobile-menu-toggle" class="text-white text-3xl">&#9776;</button>
+        <button id="mobile-menu-toggle" class="text-white text-3xl">
+            &#9776;
+        </button>
     </header>
 
     <!-- Mobile Fullscreen Nav -->
@@ -641,5 +621,29 @@
             showCards(); // Display first set of cards
         });
     </script>
+
+<script>
+  const toggleBtn = document.getElementById('mobile-menu-toggle');
+  const closeBtn = document.getElementById('mobile-menu-close');
+  const mobileNav = document.getElementById('mobile-nav');
+
+  // Open menu
+  toggleBtn.addEventListener('click', () => {
+    mobileNav.classList.remove('hidden');
+  });
+
+  // Close menu (close button)
+  closeBtn.addEventListener('click', () => {
+    mobileNav.classList.add('hidden');
+  });
+
+  // Close menu when any nav link is clicked
+  mobileNav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileNav.classList.add('hidden');
+    });
+  });
+</script>
+
 </body>
 </html>
