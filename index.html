@@ -125,6 +125,30 @@
         }
     </style>
 </head>
+
+<script>
+  const toggleBtn = document.getElementById('mobile-menu-toggle');
+  const closeBtn = document.getElementById('mobile-menu-close');
+  const mobileNav = document.getElementById('mobile-nav');
+
+  // Open menu
+  toggleBtn.addEventListener('click', () => {
+    mobileNav.classList.remove('hidden');
+  });
+
+  // Close menu (close button)
+  closeBtn.addEventListener('click', () => {
+    mobileNav.classList.add('hidden');
+  });
+
+  // Close menu when any nav link is clicked
+  mobileNav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileNav.classList.add('hidden');
+    });
+  });
+</script>
+
 <body class="text-gray-200">
 
     <!-- Message Box Element -->
@@ -160,20 +184,20 @@
     </div>
     </header>
 
-    <!-- Header for Mobile (Hamburger Menu) -->
-    <header class="md:hidden fixed w-full z-50 bg-black/80 backdrop-blur-sm py-4 px-4 flex justify-between items-center font-[Orbitron]">
-          <a href="#home" class="text-sky-400 text-xl font-bold">Dev Thakkar</a>
-          <button id="mobile-menu-toggle" class="text-white text-3xl">&#9776;</button>
+    <!-- Mobile Header (Only for small screens) -->
+    <header class="md:hidden fixed w-full z-50 bg-black/80 backdrop-blur-md py-4 px-4 flex justify-between items-center font-[Orbitron]">
+        <a href="#home" class="text-sky-400 text-xl font-bold">Dev Thakkar</a>
+        <button id="mobile-menu-toggle" class="text-white text-3xl">&#9776;</button>
     </header>
 
-    <!-- Mobile Fullscreen Menu -->
-    <div id="mobile-nav" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-40 flex flex-col items-center justify-center space-y-6 text-white text-xl font-semibold font-[Orbitron]">
-        <a href="#about" class="hover:text-sky-300">ABOUT</a>
-        <a href="#skills" class="hover:text-sky-300">SKILLS</a>
-        <a href="#portfolio" class="hover:text-sky-300">PORTFOLIO</a>
-        <a href="#experience" class="hover:text-sky-300">EXPERIENCE</a>
-        <a href="#contact" class="hover:text-sky-300">CONTACT</a>
-        <button id="mobile-menu-close" class="mt-6 text-red-400 hover:text-red-300">Close ✕</button>
+    <!-- Mobile Fullscreen Nav -->
+    <div id="mobile-nav" class="hidden fixed inset-0 z-40 bg-black/80 backdrop-blur-lg flex flex-col items-center justify-center space-y-8 text-white text-xl font-semibold font-[Orbitron] transition-all duration-300">
+        <a href="#about" class="hover:text-sky-400">ABOUT</a>
+        <a href="#skills" class="hover:text-sky-400">SKILLS</a>
+        <a href="#portfolio" class="hover:text-sky-400">PORTFOLIO</a>
+        <a href="#experience" class="hover:text-sky-400">EXPERIENCE</a>
+        <a href="#contact" class="hover:text-sky-400">CONTACT</a>
+        <button id="mobile-menu-close" class="text-red-400 hover:text-red-300 text-lg mt-6">Close ✕</button>
     </div>
       
     <!-- Hero Section -->
