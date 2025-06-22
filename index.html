@@ -629,7 +629,7 @@
 
   // Open menu
   toggleBtn.addEventListener('click', () => {
-    mobileNav.classList.remove('hidden');
+    mobileNav.classList.toggle('hidden');
   });
 
   // Close menu (close button)
@@ -643,6 +643,59 @@
       mobileNav.classList.add('hidden');
     });
   });
+    document.addEventListener("DOMContentLoaded", function () {
+    const portfolioTrack = document.getElementById('portfolio-track');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const projectCards = Array.from(portfolioTrack.children);
+
+    let currentIndex = 0;
+    let cardsPerPage = 3;
+
+    function updateCardsPerPage() {
+        if (window.innerWidth >= 1024) {
+        cardsPerPage = 3;
+        } else if (window.innerWidth >= 768) {
+        cardsPerPage = 2;
+        } else {
+        cardsPerPage = 1;
+        }
+        showCards();
+    }
+
+    function showCards() {
+        const cardWidth = portfolioTrack.querySelector('.carousel-card').offsetWidth;
+        const offset = -(currentIndex * (cardWidth + 16)); // 16px = gap-4
+
+        portfolioTrack.style.transform = `translateX(${offset}px)`;
+
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.disabled = currentIndex >= projectCards.length - cardsPerPage;
+
+        prevBtn.classList.toggle('opacity-50', prevBtn.disabled);
+        prevBtn.classList.toggle('cursor-not-allowed', prevBtn.disabled);
+        nextBtn.classList.toggle('opacity-50', nextBtn.disabled);
+        nextBtn.classList.toggle('cursor-not-allowed', nextBtn.disabled);
+    }
+
+    nextBtn.addEventListener('click', () => {
+        if (currentIndex < projectCards.length - cardsPerPage) {
+        currentIndex++;
+        showCards();
+        }
+    });
+
+    prevBtn.addEventListener('click', () => {
+        if (currentIndex > 0) {
+        currentIndex--;
+        showCards();
+        }
+    });
+
+    window.addEventListener('resize', updateCardsPerPage);
+
+    updateCardsPerPage(); // Initial load
+    });
 </script>
 
 </body>
