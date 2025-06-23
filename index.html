@@ -24,12 +24,25 @@
             color: #E0E0F0;
 
             /* Space theme background */
-            background-image: url('bg.gif');
+            background-image: url('bg.png');
             background-size: cover;
             background-repeat: no-repeat;
-            background-attachment: fixed;
             background-position: top;
+            position: relative; /* Needed for pseudo-element */
+            z-index: 0;
         }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.6); /* Adjust opacity here */
+            z-index: -1;
+            pointer-events: none;
+        }
+
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Orbitron', sans-serif; /* Apply Orbitron to headings */
         }
@@ -227,7 +240,7 @@
             <h2 class="text-4xl font-bold text-sky-400 mb-8 text-center">Cosmic Capabilities</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Skill Category 1 -->
-                <div class="bg-gray-900 p-8 rounded-xl shadow-lg border border-sky-800 hover:shadow-xl transition duration-300 transform hover:scale-105">
+                <div class="bg-gray-900 p-8 rounded-xl shadow-lg border bg-opacity-50 border-sky-800 hover:shadow-xl transition duration-300 transform hover:scale-105">
                     <h3 class="text-2xl font-semibold text-purple-300 mb-4 flex items-center"><i class="fas fa-satellite mr-3"></i> Space Systems</h3>
                     <ul class="list-disc list-inside text-lg text-gray-300">
                         <li>Satellite Design & Analysis</li>
@@ -238,7 +251,7 @@
                     </ul>
                 </div>
                 <!-- Skill Category 2 -->
-                <div class="bg-gray-900 p-8 rounded-xl shadow-lg border border-sky-800 hover:shadow-xl transition duration-300 transform hover:scale-105">
+                <div class="bg-gray-900 p-8 rounded-xl shadow-lg border bg-opacity-50 border-sky-800 hover:shadow-xl transition duration-300 transform hover:scale-105">
                     <h3 class="text-2xl font-semibold text-purple-300 mb-4 flex items-center"><i class="fas fa-terminal mr-3"></i> Software & Simulations</h3>
                     <ul class="list-disc list-inside text-lg text-gray-300">
                         <li>STK (Satellite Tool Kit)</li>
@@ -249,7 +262,7 @@
                     </ul>
                 </div>
                 <!-- Skill Category 3 -->
-                <div class="bg-gray-900 p-8 rounded-xl shadow-lg border border-sky-800 hover:shadow-xl transition duration-300 transform hover:scale-105">
+                <div class="bg-gray-900 p-8 rounded-xl shadow-lg border bg-opacity-50 border-sky-800 hover:shadow-xl transition duration-300 transform hover:scale-105">
                     <h3 class="text-2xl font-semibold text-purple-300 mb-4 flex items-center"><i class="fas fa-brain mr-3"></i> Interstellar Acumen</h3>
                     <ul class="list-disc list-inside text-lg text-gray-300">
                         <li>Systems Engineering</li>
@@ -270,7 +283,7 @@
             <div class="carousel-container relative">
                 <div class="carousel-track" id="portfolio-track">
                     <!-- Project Card 1 -->
-                    <div class="carousel-card bg-gray-950 rounded-xl shadow-lg overflow-hidden border border-sky-800 flex-none">
+                    <div class="carousel-card bg-gray-950 bg-opacity-80 rounded-xl shadow-lg overflow-hidden border border-sky-800 flex-none">
                         <img src="https://placehold.co/600x400/1A1A30/E0E0F0?text=Orbital+Maneuver+Sim" alt="Project 1: Orbital Maneuver Simulation" class="w-full h-48 object-cover">
                         <div class="p-6">
                             <h3 class="text-2xl font-semibold text-purple-300 mb-2">Advanced Orbital Maneuver Simulation</h3>
@@ -281,7 +294,7 @@
                         </div>
                     </div>
                     <!-- Project Card 2 -->
-                    <div class="carousel-card bg-gray-950 rounded-xl shadow-lg overflow-hidden border border-sky-800 flex-none">
+                    <div class="carousel-card bg-gray-950 bg-opacity-80 rounded-xl shadow-lg overflow-hidden border border-sky-800 flex-none">
                         <img src="https://placehold.co/600x400/1A1A30/E0E0F0?text=Cubesat+Design" alt="Project 2: CubeSat Structural Design" class="w-full h-48 object-cover">
                         <div class="p-6">
                             <h3 class="text-2xl font-semibold text-purple-300 mb-2">Next-Gen CubeSat Structural Design</h3>
@@ -292,7 +305,7 @@
                         </div>
                     </div>
                     <!-- Project Card 3 -->
-                    <div class="carousel-card bg-gray-950 rounded-xl shadow-lg overflow-hidden border border-sky-800 flex-none">
+                    <div class="carousel-card bg-gray-950 bg-opacity-80 rounded-xl shadow-lg overflow-hidden border border-sky-800 flex-none">
                         <img src="https://placehold.co/600x400/1A1A30/E0E0F0?text=Exoplanet+Mission" alt="Project 3: Exoplanet Probe Mission Concept" class="w-full h-48 object-cover">
                         <div class="p-6">
                             <h3 class="text-2xl font-semibold text-purple-300 mb-2">Exoplanet Probe Mission Concept</h3>
@@ -303,7 +316,7 @@
                         </div>
                     </div>
                     <!-- Project Card 4 -->
-                    <div class="carousel-card bg-gray-950 rounded-xl shadow-lg overflow-hidden border border-sky-800 flex-none">
+                    <div class="carousel-card bg-gray-950 rounded-xl bg-opacity-80 shadow-lg overflow-hidden border border-sky-800 flex-none">
                         <img src="https://placehold.co/600x400/1A1A30/E0E0F0?text=Asteroid+Mining+Robot" alt="Project 4: Asteroid Mining Robot" class="w-full h-48 object-cover">
                         <div class="p-6">
                             <h3 class="text-2xl font-semibold text-purple-300 mb-2">Asteroid Mining Robot Design</h3>
@@ -314,7 +327,7 @@
                         </div>
                     </div>
                     <!-- Project Card 5 -->
-                    <div class="carousel-card bg-gray-950 rounded-xl shadow-lg overflow-hidden border border-sky-800 flex-none">
+                    <div class="carousel-card bg-gray-950 rounded-xl bg-opacity-80 shadow-lg overflow-hidden border border-sky-800 flex-none">
                         <img src="https://placehold.co/600x400/1A1A30/E0E0F0?text=Lunar+Habitat+System" alt="Project 5: Lunar Habitat Life Support" class="w-full h-48 object-cover">
                         <div class="p-6">
                             <h3 class="text-2xl font-semibold text-purple-300 mb-2">Lunar Habitat Life Support Systems</h3>
@@ -325,7 +338,7 @@
                         </div>
                     </div>
                     <!-- Project Card 6 -->
-                    <div class="carousel-card bg-gray-950 rounded-xl shadow-lg overflow-hidden border border-sky-800 flex-none">
+                    <div class="carousel-card bg-gray-950 rounded-xl bg-opacity-80 shadow-lg overflow-hidden border border-sky-800 flex-none">
                         <img src="https://placehold.co/600x400/1A1A30/E0E0F0?text=Mars+Entry+Vehicle" alt="Project 6: Mars Entry Vehicle" class="w-full h-48 object-cover">
                         <div class="p-6">
                             <h3 class="text-2xl font-semibold text-purple-300 mb-2">Mars Atmospheric Entry Vehicle</h3>
@@ -336,7 +349,7 @@
                         </div>
                     </div>
                     <!-- Project Card 7 (New) -->
-                    <div class="carousel-card bg-gray-950 rounded-xl shadow-lg overflow-hidden border border-sky-800 flex-none">
+                    <div class="carousel-card bg-gray-950 rounded-xl bg-opacity-80 shadow-lg overflow-hidden border border-sky-800 flex-none">
                         <img src="https://placehold.co/600x400/1A1A30/E0E0F0?text=Deep+Space+Probe" alt="Project 7: Deep Space Probe Development" class="w-full h-48 object-cover">
                         <div class="p-6">
                             <h3 class="text-2xl font-semibold text-purple-300 mb-2">Deep Space Probe Development</h3>
@@ -364,7 +377,7 @@
             <h2 class="text-4xl font-bold text-sky-400 mb-8 text-center">My Journey Through Space</h2>
             <div class="space-y-10">
                 <!-- Job Experience 1 -->
-                <div class="bg-gray-900 p-8 rounded-xl shadow-lg border border-sky-800">
+                <div class="bg-gray-900 p-8 bg-opacity-90 rounded-xl shadow-lg border border-sky-800">
                     <h3 class="text-2xl font-semibold text-gray-100 mb-2">Space Systems Engineer <span class="text-sky-400">@ Stellar Corp.</span></h3>
                     <p class="text-lg text-gray-400 mb-4">June 2022 – Present</p>
                     <ul class="list-disc list-inside text-gray-300 space-y-2">
@@ -374,7 +387,7 @@
                     </ul>
                 </div>
                 <!-- Job Experience 2 -->
-                <div class="bg-gray-900 p-8 rounded-xl shadow-lg border border-sky-800">
+                <div class="bg-gray-900 p-8 rounded-xl bg-opacity-90 shadow-lg border border-sky-800">
                     <h3 class="text-2xl font-semibold text-gray-100 mb-2">Aerospace Intern <span class="text-sky-400">@ Galactic Innovators</span></h3>
                     <p class="text-lg text-gray-400 mb-4">May 2021 – Aug 2021</p>
                     <ul class="list-disc list-inside text-gray-300 space-y-2">
@@ -384,7 +397,7 @@
                     </ul>
                 </div>
                 <!-- Education -->
-                <div class="bg-gray-900 p-8 rounded-xl shadow-lg border border-sky-800">
+                <div class="bg-gray-900 p-8 rounded-xl bg-opacity-90 shadow-lg border border-sky-800">
                     <h3 class="text-2xl font-semibold text-gray-100 mb-2">M.S. in Aerospace Engineering <span class="text-sky-400">@ Lunar University</span></h3>
                     <p class="text-lg text-gray-400 mb-4">Sept 2018 – May 2020</p>
                     <ul class="list-disc list-inside text-gray-300 space-y-2">
