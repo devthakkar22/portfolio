@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dev Thakkar - Systems Engineer Portfolio</title>
+    <link rel="icon" href="D.png" type="image/png">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter (for body) and Orbitron (for headings) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons (space-related icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Custom styles for the space theme */
+        html {
+            scroll-behavior: smooth; /* Ensures smooth scrolling */
+            /* Adjusted scroll-padding-top to provide ample clearance for the fixed header */
+            scroll-padding-top: 64px; /* Approximate height of header + a little buffer */
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #E0E0F0;
+            position: relative;
+            z-index: 0;
+
+            /* Default: mobile background */
+            background-image: url('bg-mobile.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: top;
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2); /* black overlay */
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Desktop override */
+        @media (min-width: 768px) {
+            body {
+                background-image: url('bg.png');
+            }
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Orbitron', sans-serif; /* Apply Orbitron to headings */
+        }
+        
+        .section-padding {
+            padding: 64px 0; /* Reduced default padding for sections (from 80px to 64px) */
+        }
+
+        /* Message box for form submission feedback */
+        #message-box {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #1A1A30; /* Darker navy for message box */
+            color: #E0E0F0;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            display: none; /* Hidden by default */
+            animation: fadeInOut 4s forwards;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(20px); }
+            10% { opacity: 1; transform: translateY(0); }
+            90% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(20px); }
+        }
+
+        /* Carousel specific styles (as provided by the user) */
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            padding: 0; /* ensure padding doesn't cause scroll */
+        }
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            gap: 1rem; /* Consistent with JS (16px) */
+            justify-content: space-between;
+        }
+        .carousel-card {
+            flex: 0 0 32%; /* 3 cards per row */
+            max-width: 32%;
+            /* Removed previous styling for a simpler look */
+            box-sizing: border-box; /* Ensure padding/border are included in the width */
+        }
+
+        @media (max-width: 1023px) { /* md breakpoint and below */
+            .carousel-card {
+                flex: 0 0 48%; /* 2 cards per row */
+                max-width: 48%;
+            }
+        }
+
+        @media (max-width: 767px) { /* sm breakpoint and below */
+            .carousel-card {
+                flex: 0 0 100%; /* 1 card per row */
+                max-width: 100%;
+            } 
+        }
+
+        /* Scroll Reveal base styles (Slide Up) */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px); /* Starts from below */
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .scroll-reveal.is-revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scroll Reveal (Slide Down) */
+        .scroll-reveal-down {
+            opacity: 0;
+            transform: translateY(-30px); /* Starts from above */
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .scroll-reveal-down.is-revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scroll Reveal Text (for headings, always slides up) */
+        .scroll-reveal-text .word {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            display: inline-block; /* Keep words on the same line */
+        }
+
+        .scroll-reveal-text.is-revealed .word {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Spotlight Card Styles (from user's provided reference code) */
+        .spotlight-card {
+            position: relative;
+            border-radius: 1.5rem; /* Equivalent to rounded-xl in Tailwind */
+            border: 1px solid #222; /* Darker border */
+            background-color: #111; /* Darker background */
+            padding: 2rem; /* More padding */
+            overflow: hidden;
+            /* Custom properties for mouse position and spotlight color */
+            --mouse-x: 50%;
+            --mouse-y: 50%;
+            --spotlight-color: rgba(0, 229, 255, 0.4); /* Using the provided spotlightColor */
+        }
+
+        .spotlight-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), var(--spotlight-color), transparent 80%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        .spotlight-card:hover::before,
+        .spotlight-card:focus-within::before {
+            opacity: 0.6;
+        }
+    </style>
+</head>
+
+
+<body class="text-gray-200">
+
+    <!-- Message Box Element -->
+    <div id="message-box" class="rounded-lg shadow-lg"></div>
+
+    <!-- Header & Navigation -->
+    <!-- Header for Desktop (Original Table-Based) -->
+    <header class="fixed w-full z-50 bg-transparent py-5 font-[Orbitron] hidden md:block">
+    <div class="w-full flex justify-center">
+        <table class="border-collapse text-xs md:text-xs text-white font-medium tracking-wide overflow-hidden shadow-md bg-black/70 backdrop-blur-sm">
+        <tr>
+            <td class="px-8 py-3 border border-gray-700 hover:bg-white/20 transition duration-200 text-sky-400 font-extrabold md:text-base">
+            <a href="#home">Dev Thakkar</a>
+            </td>
+            <td class="px-4 py-3 border border-gray-700 hover:bg-white/20 transition duration-200 text-center">
+            <a href="#about" class="block">ABOUT</a>
+            </td>
+            <td class="px-4 py-3 border border-gray-700 hover:bg-white/20 transition duration-200 text-center">
+            <a href="#skills" class="block">SKILLS</a>
+            </td>
+            <td class="px-4 py-3 border border-gray-700 hover:bg-white/20 transition duration-200 text-center">
+            <a href="#portfolio" class="block">PORTFOLIO</a>
+            </td>
+            <td class="px-4 py-3 border border-gray-700 hover:bg-white/20 transition duration-200 text-center">
+            <a href="#experience" class="block">EXPERIENCE</a>
+            </td>
+            <td class="px-4 py-3 border border-gray-700 hover:bg-white/20 transition duration-200 text-center">
+            <a href="#contact" class="block">CONTACT</a>
+            </td>
+        </tr>
+        </table>
+    </div>
+    </header>
+
+    <!-- Mobile Header (Only for small screens) -->
+    <header class="md:hidden fixed w-full z-50 bg-black/80 backdrop-blur-md py-4 px-4 flex justify-between items-center font-[Orbitron]">
+        <a href="#home" class="text-sky-400 text-xl font-bold">Dev Thakkar</a>
+        <button id="mobile-menu-toggle" class="text-white text-3xl">
+            &#9776;
+        </button>
+    </header>
+
+    <!-- Mobile Fullscreen Nav -->
+    <div id="mobile-nav" class="hidden fixed inset-0 z-40 bg-black/80 backdrop-blur-lg flex flex-col items-center justify-center space-y-8 text-white text-xl font-semibold font-[Orbitron] transition-all duration-300">
+        <a href="#about" class="hover:text-sky-400">ABOUT</a>
+        <a href="#skills" class="hover:text-sky-400">SKILLS</a>
+        <a href="#portfolio" class="hover:text-sky-400">PORTFOLIO</a>
+        <a href="#experience" class="hover:text-sky-400">EXPERIENCE</a>
+        <a href="#contact" class="hover:text-sky-400">CONTACT</a>
+        <button id="mobile-menu-close" class="text-red-400 hover:text-red-300 text-lg mt-6">Close ✕</button>
+    </div>
+      
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center text-center relative pt-24 md:pt-0">
+        <!-- Added spotlight-card class and adjusted Tailwind classes for styling -->
+        <div id="hero-card" class="spotlight-card relative z-10 text-white p-6 md:p-10 bg-black bg-opacity-50 rounded-xl max-w-4xl mx-auto shadow-2xl border border-sky-600 text-center">
+            <h1 class="text-3xl sm:text-4xl md:text-6xl font-extrabold mb-4 leading-tight text-sky-400">DEV THAKKAR</h1>
+            <p class="text-lg sm:text-xl md:text-3xl text-purple-300 mb-4 sm:mb-6"> Systems Engineer | Space Systems</p>
+            <p class="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto text-gray-300 px-2 sm:px-0">
+            Shaping the Future of Space Technology
+            </p>
+
+            <!-- CTA Buttons (Stack on mobile, inline on sm+) -->
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+            <a href="#portfolio" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 border border-sky-400">
+                Explore My Projects
+            </a>
+            <a href="#contact" class="bg-transparent border-2 border-sky-400 hover:border-sky-300 text-sky-300 font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+                Launch a Connection
+            </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Me Section -->
+    <section id="about" class="section-padding scroll-reveal">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <h2 class="text-4xl font-bold text-sky-400 mb-8 text-center scroll-reveal-text">About My Trajectory</h2>
+            <div class="grid md:grid-cols-2 gap-10 items-center">
+                <div class="flex justify-center md:justify-start">
+                    <img src="photo.jpg" alt="Your Professional Photo in Space Theme" class="rounded-full shadow-xl w-64 h-64 md:w-80 md:h-80 object-cover border-4 border-sky-600">
+                </div>
+                <div>
+                    <p class="text-lg leading-relaxed mb-6 text-gray-300">
+                        I am an Aerospace Engineer passionate about the field of space systems. 
+                        My journey is fueled by a profound fascination with the space science and robust knowledge on  propulsion systems,and mission architectures.
+                        My expertise spans <span class="font-semibold text-sky-300"> 
+                        satellite design, mission planning, orbital mechanics, and system integration</span>, helping in build state of the art systems.
+                    </p>
+                    <p class="text-lg leading-relaxed text-gray-300">
+                        With 2 years of industrial experience experience, I excel in transforming theoretical concepts into tangible space solutions, navigating the rigorous demands 
+                        of space engineering with precision and foresight. I am passionate about leveraging cutting-edge technology to explore new frontiers 
+                        and solve the challenges.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section-padding scroll-reveal-down">
+        <div class="container mx-auto px-4 max-w-5xl">
+            <h2 class="text-4xl font-bold text-sky-400 mb-8 text-center scroll-reveal-text">Cosmic Capabilities</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Skill Category 1 -->
+                <div class="bg-gray-900 p-8 rounded-xl shadow-lg border bg-opacity-50 border-sky-800 hover:shadow-xl transition duration-300 transform hover:scale-105">
+                    <h3 class="text-2xl font-semibold text-purple-300 mb-4 flex items-center"><i class="fas fa-satellite mr-3"></i> Space Systems</h3>
+                    <ul class="list-disc list-inside text-lg text-gray-300">
+                        <li>Satellite Design & Analysis</li>
+                        <li>Orbital Mechanics</li>
+                        <li>Mission Planning & Operations</li>
+                    </ul>
+                </div>
+                <!-- Skill Category 2 -->
+                <div class="bg-gray-900 p-8 rounded-xl shadow-lg border bg-opacity-50 border-sky-800 hover:shadow-xl transition duration-300 transform hover:scale-105">
+                    <h3 class="text-2xl font-semibold text-purple-300 mb-4 flex items-center"><i class="fas fa-terminal mr-3"></i> Softwares</h3>
+                    <ul class="list-disc list-inside text-lg text-gray-300">
+                        <li>Python</li>
+                        <li>NASA GMAT</li>
+                        <li>STK (Satellite Tool Kit)</li>
+                        <li>Creo Parametric and Fusion 360</li>
+                        <li>MATLAB, Simulink</li>
+                        <li>HyerMesh(Optistrut), ANSYS Structural</li>
+                        <li>Simcenter 3D, ANSYS Thermal</li>
+                        <li>LaTeX, Word, Excel and PowerPoint</li>
+                    </ul>
+                </div>
+                <!-- Skill Category 3 -->
+                <div class="bg-gray-900 p-8 rounded-xl shadow-lg border bg-opacity-50 border-sky-800 hover:shadow-xl transition duration-300 transform hover:scale-105">
+                    <h3 class="text-2xl font-semibold text-purple-300 mb-4 flex items-center"><i class="fas fa-brain mr-3"></i> Acumen</h3>
+                    <ul class="list-disc list-inside text-lg text-gray-300">
+                        <li>Systems Engineering</li>
+                        <li>Business Development Knowledge</li>
+                        <li>Technical Documentation</li>
+                        <li>Effective Communication</li>
+                        <li>Project Leadership</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio/Projects Section -->
+    <section id="portfolio" class="section-padding scroll-reveal">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <h2 class="text-4xl font-bold text-sky-400 mb-8 text-center scroll-reveal-text">Cosmic Creations</h2>
+            <div class="carousel-container relative">
+                <div class="carousel-track" id="portfolio-track">
+                    <!-- Project Card 1 -->
+                    <div class="carousel-card bg-gray-950 rounded-xl shadow-lg overflow-hidden border border-sky-800 flex-none">
+                        <img src="https://placehold.co/600x400/1A1A30/E0E0F0?text=Orbital+Maneuver+Sim" alt="Project 1: Orbital Maneuver Simulation" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-semibold text-purple-300 mb-2">Advanced Orbital Maneuver Simulation</h3>
+                            <p class="text-gray-300 mb-4">
+                                Developed a high-fidelity simulation for complex orbital rendezvous and docking procedures, optimizing fuel consumption.
+                            </p>
+                            <a href="#" class="inline-block bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-4 rounded-md transition duration-300">Explore Trajectory</a>
+                        </div>
+                    </div>
+                    <!-- Project Card 2 -->
+                    <div class="carousel-card bg-gray-950 rounded-xl shadow-lg overflow-hidden border border-sky-800 flex-none">
+                        <img src="https://placehold.co/600x400/1A1A30/E0E0F0?text=Cubesat+Design" alt="Project 2: CubeSat Structural Design" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-semibold text-purple-300 mb-2">Next-Gen CubeSat Structural Design</h3>
+                            <p class="text-gray-300 mb-4">
+                                Engineered a lightweight, radiation-hardened structure for a 3U CubeSat, surpassing mission longevity goals.
+                            </p>
+                            <a href="#" class="inline-block bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-4 rounded-md transition duration-300">Unveil Blueprint</a>
+                        </div>
+                    </div>
+                    <!-- Project Card 3 -->
+                    <div class="carousel-card bg-gray-950 rounded-xl shadow-lg overflow-hidden border border-sky-800 flex-none">
+                        <img src="https://placehold.co/600x400/1A1A30/E0E0F0?text=Exoplanet+Mission" alt="Project 3: Exoplanet Probe Mission Concept" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-semibold text-purple-300 mb-2">Exoplanet Probe Mission Concept</h3>
+                            <p class="text-gray-300 mb-4">
+                                Contributed to the preliminary design and trajectory analysis for an interstellar probe targeting exoplanets.
+                            </p>
+                            <a href="#" class="inline-block bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-4 rounded-md transition duration-300">Initiate Mission</a>
+                        </div>
+                    </div>
+                    <!-- Project Card 4 -->
+                    <div class="carousel-card bg-gray-950 rounded-xl shadow-lg overflow-hidden border border-sky-800 flex-none">
+                        <img src="https://placehold.co/600x400/1A1A30/E0E0F0?text=Asteroid+Mining+Robot" alt="Project 4: Asteroid Mining Robot" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-semibold text-purple-300 mb-2">Asteroid Mining Robot Design</h3>
+                            <p class="text-gray-300 mb-4">
+                                Conceptualized and designed a robotic system for autonomous asteroid resource extraction in deep space.
+                            </p>
+                            <a href="#" class="inline-block bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-4 rounded-md transition duration-300">View Robotics</a>
+                        </div>
+                    </div>
+                    <!-- Project Card 5 -->
+                    <div class="carousel-card bg-gray-950 rounded-xl shadow-lg overflow-hidden border border-sky-800 flex-none">
+                        <img src="https://placehold.co/600x400/1A1A30/E0E0F0?text=Lunar+Habitat+System" alt="Project 5: Lunar Habitat Life Support" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-semibold text-purple-300 mb-2">Lunar Habitat Life Support Systems</h3>
+                            <p class="text-gray-300 mb-4">
+                                Engineered advanced closed-loop life support systems for sustainable human presence on the Moon.
+                            </p>
+                            <a href="#" class="inline-block bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-4 rounded-md transition duration-300">See Habitat</a>
+                        </div>
+                    </div>
+                    <!-- Project Card 6 -->
+                    <div class="carousel-card bg-gray-950 rounded-xl shadow-lg overflow-hidden border border-sky-800 flex-none">
+                        <img src="https://placehold.co/600x400/1A1A30/E0E0F0?text=Mars+Entry+Vehicle" alt="Project 6: Mars Entry Vehicle" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-semibold text-purple-300 mb-2">Mars Atmospheric Entry Vehicle</h3>
+                            <p class="text-gray-300 mb-4">
+                                Conducted thermal protection system analysis for a manned Mars entry, descent, and landing vehicle.
+                            </p>
+                            <a href="#" class="inline-block bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-4 rounded-md transition duration-300">Analyze Reentry</a>
+                        </div>
+                    </div>
+                    <!-- Project Card 7 (New) -->
+                    <div class="carousel-card bg-gray-950 rounded-xl shadow-lg overflow-hidden border border-sky-800 flex-none">
+                        <img src="https://placehold.co/600x400/1A1A30/E0E0F0?text=Deep+Space+Probe" alt="Project 7: Deep Space Probe Development" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-semibold text-purple-300 mb-2">Deep Space Probe Development</h3>
+                            <p class="text-gray-300 mb-4">
+                                Involved in the conceptualization and early-stage design of a next-generation probe for outer solar system exploration.
+                            </p>
+                            <a href="#" class="inline-block bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-4 rounded-md transition duration-300">Explore Design</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Carousel Navigation Buttons -->
+                <button id="prev-btn" class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-800 bg-opacity-75 text-white p-3 rounded-full shadow-lg hover:bg-gray-700 focus:outline-none transition-all duration-300 ml-2">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button id="next-btn" class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-800 bg-opacity-75 text-white p-3 rounded-full shadow-lg hover:bg-gray-700 focus:outline-none transition-all duration-300 mr-2">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section (Resume Highlights) -->
+    <section id="experience" class="section-padding scroll-reveal-down">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <h2 class="text-4xl font-bold text-sky-400 mb-8 text-center scroll-reveal-text">My Journey Through Space</h2>
+            <div class="space-y-10">
+                <!-- Job Experience 1 -->
+                <div class="bg-gray-900 p-8 bg-opacity-90 rounded-xl shadow-lg border border-sky-800">
+                    <h3 class="text-2xl font-semibold text-gray-100 mb-2">Space Systems Engineer <span class="text-sky-400">@ Stellar Corp.</span></h3>
+                    <p class="text-lg text-gray-400 mb-4">June 2022 – Present</p>
+                    <ul class="list-disc list-inside text-gray-300 space-y-2">
+                        <li>Spearheaded the integration of critical payload systems for a geostationary communication satellite, ensuring mission success.</li>
+                        <li>Developed advanced GNC algorithms for autonomous orbital maneuvers, enhancing satellite longevity and precision.</li>
+                        <li>Conducted comprehensive thermal and structural analysis for deep-space probe components.</li>
+                    </ul>
+                </div>
+                <!-- Job Experience 2 -->
+                <div class="bg-gray-900 p-8 rounded-xl bg-opacity-90 shadow-lg border border-sky-800">
+                    <h3 class="text-2xl font-semibold text-gray-100 mb-2">Aerospace Intern <span class="text-sky-400">@ Galactic Innovators</span></h3>
+                    <p class="text-lg text-gray-400 mb-4">May 2021 – Aug 2021</p>
+                    <ul class="list-disc list-inside text-gray-300 space-y-2">
+                        <li>Assisted in the design of experimental rocket nozzle geometries using CFD techniques.</li>
+                        <li>Participated in flight data analysis for atmospheric re-entry vehicles, contributing to safety improvements.</li>
+                        <li>Supported the development of test procedures for small propulsion units.</li>
+                    </ul>
+                </div>
+                <!-- Education -->
+                <div class="bg-gray-900 p-8 rounded-xl bg-opacity-90 shadow-lg border border-sky-800">
+                    <h3 class="text-2xl font-semibold text-gray-100 mb-2">M.S. in Aerospace Engineering <span class="text-sky-400">@ Lunar University</span></h3>
+                    <p class="text-lg text-gray-400 mb-4">Sept 2018 – May 2020</p>
+                    <ul class="list-disc list-inside text-lg text-gray-300 space-y-2">
+                        <li>Specialization in Spacecraft Design and Astronautics.</li>
+                        <li>Thesis: "Optimized Trajectory Planning for Interplanetary Missions Using Low-Thrust Propulsion."</li>
+                        <li>Awards: Dean's List (2019, 2020), Space Systems Fellowship.</li>
+                    </ul>
+                </div>
+                <div class="text-center mt-10">
+                    <a href="your_resume.pdf" download="Your_Name_Resume.pdf" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 border border-sky-400">Download My Star Log (PDF Resume)</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section-padding bg-gray-900 min-h-screen scroll-reveal">
+        <div class="container mx-auto px-4 max-w-3xl">
+            <h2 class="text-4xl font-bold text-sky-400 mb-8 text-center scroll-reveal-text">Engage Warp Drive</h2>
+            <form id="contact-form" class="bg-gray-950 p-8 rounded-xl shadow-lg border border-sky-800 space-y-6">
+                <div>
+                    <label for="name" class="block text-lg font-medium text-gray-300 mb-2">Your Designation</label>
+                    <input type="text" id="name" name="name" required class="w-full px-4 py-3 rounded-lg border-2 border-sky-700 focus:border-sky-500 focus:ring-sky-500 outline-none transition duration-200 bg-gray-800 text-gray-100">
+                </div>
+                <div>
+                    <label for="email" class="block text-lg font-medium text-gray-300 mb-2">Comm-Link (Email)</label>
+                    <input type="email" id="email" name="email" required class="w-full px-4 py-3 rounded-lg border-2 border-sky-700 focus:border-sky-500 focus:ring-sky-500 outline-none transition duration-200 bg-gray-800 text-gray-100">
+                </div>
+                <div>
+                    <label for="subject" class="block text-lg font-medium text-gray-300 mb-2">Transmission Subject</label>
+                    <input type="text" id="subject" name="subject" required class="w-full px-4 py-3 rounded-lg border-2 border-sky-700 focus:border-sky-500 focus:ring-sky-500 outline-none transition duration-200 bg-gray-800 text-gray-100">
+                </div>
+                <div>
+                    <label for="message" class="block text-lg font-medium text-gray-300 mb-2">Your Message (Cosmic Dust)</label>
+                    <textarea id="message" name="message" rows="6" required class="w-full px-4 py-3 rounded-lg border-2 border-sky-700 focus:border-sky-500 focus:ring-sky-500 outline-none transition duration-200 bg-gray-800 text-gray-100"></textarea>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-3 px-10 rounded-full shadow-lg transition duration-300 transform hover:scale-105 border border-sky-400">Send Transmission</button>
+                </div>
+            </form>
+            <div class="mt-12 text-center text-gray-400">
+                <p class="text-xl mb-4">Connect across the network:</p>
+                <div class="flex justify-center space-x-6 text-3xl">
+                    <a href="https://www.linkedin.com/in/yourprofile" target="_blank" class="text-sky-400 hover:text-sky-300 transition duration-300"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/yourprofile" target="_blank" class="text-gray-100 hover:text-gray-300 transition duration-300"><i class="fab fa-github"></i></a>
+                    <!-- Add more social links if desired, e.g., ResearchGate, Twitter -->
+                </div>
+                <p class="mt-6 text-lg">Direct Comm-Link: <a href="mailto:youremail@example.com" class="text-sky-400 hover:underline">youremail@example.com</a></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 text-white py-8 text-center mt-12 rounded-t-lg">
+        <div class="container mx-auto px-4">
+            <p>&copy; <span id="current-year"></span> Your Name. Interstellar Rights Reserved.</p>
+            <p class="text-sm mt-2 text-gray-400">Forged in the heart of the cosmos.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth Scrolling for Navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+
+                // Close mobile menu if open
+                if (mobileNav.classList.contains('flex')) { 
+                    mobileNav.classList.remove('flex');
+                    mobileNav.classList.add('hidden');
+                }
+            });
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-toggle'); 
+        const mobileNav = document.getElementById('mobile-nav'); 
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileNav.classList.toggle('hidden');
+            mobileNav.classList.toggle('flex');
+            mobileNav.classList.toggle('flex-col'); // Ensure vertical stacking
+        });
+
+        // Close menu (close button)
+        const mobileMenuCloseButton = document.getElementById('mobile-menu-close');
+        mobileMenuCloseButton.addEventListener('click', () => {
+            mobileNav.classList.add('hidden');
+            mobileNav.classList.remove('flex');
+            mobileNav.classList.remove('flex-col');
+        });
+
+        // Close menu when any nav link is clicked
+        mobileNav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileNav.classList.add('hidden');
+                mobileNav.classList.remove('flex');
+                mobileNav.classList.remove('flex-col');
+            });
+        });
+
+        // Set current year in footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Handle Contact Form Submission
+        const contactForm = document.getElementById('contact-form');
+        const messageBox = document.getElementById('message-box');
+
+        contactForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // In a real scenario, you would send this data to a backend service (e.g., Formspree, Netlify Forms, or a custom API)
+            // For GitHub Pages, direct server-side processing is not possible.
+            // You might use a service like Formspree.io by changing the form's action attribute:
+            // <form action="https://formspree.io/f/your_form_id" method="POST">
+
+            // Simulate form submission success/failure
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+
+            // Basic validation
+            if (!name || !email || !subject || !message) {
+                showMessage("Please fill in all fields to send your transmission.", "error");
+                return;
+            }
+
+            // Display a success message
+            showMessage("Transmission sent, " + name + "! I will establish contact soon.", "success");
+
+            // Optionally clear the form
+            contactForm.reset();
+        });
+
+        // Function to display messages in the custom message box
+        function showMessage(msg, type = "info") {
+            messageBox.textContent = msg;
+            messageBox.style.display = 'block';
+
+            // Apply different styles based on message type (optional)
+            if (type === "success") {
+                messageBox.style.backgroundColor = '#1A1A30'; /* Darker navy */
+                messageBox.style.color = '#7C3AED'; /* Purple accent */
+            } else if (type === "error") {
+                messageBox.style.backgroundColor = '#dc2626'; /* Red */
+                messageBox.style.color = '#fff';
+            }
+
+            // Hide the message after a few seconds
+            setTimeout(() => {
+                messageBox.style.display = 'none';
+            }, 4000); // Hide after 4 seconds
+        }
+
+        // --- Portfolio Carousel Logic ---
+        document.addEventListener("DOMContentLoaded", function () {
+            const portfolioTrack = document.getElementById('portfolio-track');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const projectCards = Array.from(portfolioTrack.children); 
+
+            let currentIndex = 0;
+            let cardsPerPage = 3;
+
+            function updateCardsPerPage() {
+                if (window.innerWidth >= 1024) {
+                    cardsPerPage = 3;
+                } else if (window.innerWidth >= 768) {
+                    cardsPerPage = 2;
+                } else {
+                    cardsPerPage = 1;
+                }
+                showCards();
+            }
+
+            function showCards() {
+                const cardWidth = portfolioTrack.querySelector('.carousel-card').offsetWidth; 
+                const offset = -(currentIndex * (cardWidth + 16)); // 16px = gap-4
+
+                portfolioTrack.style.transform = `translateX(${offset}px)`;
+
+                prevBtn.disabled = currentIndex === 0;
+                nextBtn.disabled = currentIndex >= projectCards.length - cardsPerPage;
+
+                prevBtn.classList.toggle('opacity-50', prevBtn.disabled);
+                prevBtn.classList.toggle('cursor-not-allowed', prevBtn.disabled);
+                nextBtn.classList.toggle('opacity-50', nextBtn.disabled);
+                nextBtn.classList.toggle('cursor-not-allowed', nextBtn.disabled);
+            }
+
+            nextBtn.addEventListener('click', () => {
+                if (currentIndex < projectCards.length - cardsPerPage) {
+                    currentIndex++;
+                    showCards();
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    showCards();
+                }
+            });
+
+            window.addEventListener('resize', updateCardsPerPage);
+
+            updateCardsPerPage(); 
+        });
+
+
+        // --- Scroll Reveal Logic ---
+        // Function to split text into words and wrap them in spans
+        function splitWords(element) {
+            const text = element.textContent;
+            element.innerHTML = text.split(' ').map(word => `<span class="word">${word}</span>`).join(' ');
+        }
+
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-revealed');
+
+                    // If it's a scroll-reveal-text element, stagger word animation
+                    if (entry.target.classList.contains('scroll-reveal-text')) {
+                        const words = entry.target.querySelectorAll('.word');
+                        words.forEach((word, index) => {
+                            word.style.transitionDelay = `${index * 0.05}s`; // Stagger delay
+                        });
+                    }
+                } else {
+                    // Remove 'is-revealed' class when element is no longer intersecting
+                    // This allows the animation to replay when it comes back into view
+                    entry.target.classList.remove('is-revealed');
+
+                    // Reset word animation delays if needed (optional, for a cleaner re-reveal)
+                    if (entry.target.classList.contains('scroll-reveal-text')) {
+                        const words = entry.target.querySelectorAll('.word');
+                        words.forEach(word => {
+                            word.style.transitionDelay = '0s';
+                        });
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for scroll reveal
+        document.querySelectorAll('.scroll-reveal, .scroll-reveal-down, .scroll-reveal-text').forEach(element => {
+            if (element.classList.contains('scroll-reveal-text')) {
+                splitWords(element); // Prepare text for word animation
+            }
+            observer.observe(element);
+        });
+
+        // --- Spotlight Card Logic ---
+        document.addEventListener("DOMContentLoaded", function () {
+            const heroCard = document.getElementById('hero-card'); 
+
+            if (heroCard) {
+                // Apply the base spotlight-card class to ensure its styles are active
+                heroCard.classList.add('spotlight-card');
+
+                heroCard.addEventListener('mousemove', (e) => {
+                    const rect = heroCard.getBoundingClientRect();
+                    const x = e.clientX - rect.left; // X position within the element.
+                    const y = e.clientY - rect.top;  // Y position within the element.
+
+                    // Update CSS custom properties for the radial gradient position
+                    heroCard.style.setProperty('--mouse-x', `${x}px`);
+                    heroCard.style.setProperty('--mouse-y', `${y}px`);
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
